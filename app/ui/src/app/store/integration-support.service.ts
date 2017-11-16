@@ -1,5 +1,5 @@
 import { Injector, Injectable } from '@angular/core';
-import { Http, Response, ResponseContentType } from '@angular/http';
+import { Http, Response, ResponseContentType, RequestMethod , Headers} from '@angular/http';
 import { Restangular } from 'ngx-restangular';
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
@@ -9,6 +9,7 @@ import { ConfigService } from '../config.service';
 import { Action, Connection, Integration } from '../model';
 import { log, getCategory } from '../logging';
 
+
 @Injectable()
 export class IntegrationSupportService {
   service: Restangular = undefined;
@@ -16,6 +17,7 @@ export class IntegrationSupportService {
   metadataService: Restangular = undefined;
   mapperService: Restangular = undefined;
   configService: ConfigService = undefined;
+  supportService: Restangular = undefined;
 
   constructor(
     restangular: Restangular,
@@ -29,6 +31,7 @@ export class IntegrationSupportService {
     const restangularMapper = injector.get(RESTANGULAR_MAPPER);
     this.mapperService = restangularMapper.service('java-inspections');
     this.configService = config;
+    this.supportService = restangular.withConfig(configurer =>  configurer.setBaseUrl('/api/v1')).service('support');
   }
 
   getFilterOptions(dataShape: any): Observable<any> {
@@ -85,4 +88,29 @@ export class IntegrationSupportService {
   importIntegrationURL(): string {
     return this.service.one('import').getRestangularUrl();
   }
+
+  getPods(): Observable<Response> {
+    const url = this.supportService
+      .one('pods')
+      .getRestangularUrl();
+    return this.http.get(url);
+  }
+
+  getSupportFormConfiguration(): Observable<Response> {
+    const url = this.supportService
+      .one('formConfig')
+      .getRestangularUrl();
+    return this.http.get(url);
+  }
+
+  downloadSupportData(configuredProperties: any): Observable<Response>  {
+    const url = this.supportService
+      .one('downloadSupportZip')
+      .getRestangularUrl();
+    return this.http.post(url, configuredProperties, {
+      method: RequestMethod.Post,
+      responseType: ResponseContentType.Blob
+  });
+  }
+
 }

@@ -14,7 +14,7 @@
                  [ngTemplateOutlet]="body"
                  [ngOutletContext]="{ modal: this }"></ng-template>
   </div>
-  <div class="modal-footer">
+  <div class="modal-footer" [hidden]="hideNav">
     <button type="button"
             class="btn btn-default"
             (click)="cancel()">

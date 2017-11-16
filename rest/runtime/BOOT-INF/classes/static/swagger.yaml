@@ -1,0 +1,1415 @@
+---
+swagger: "2.0"
+info:
+  description: "The Syndesis REST API connects to back-end services on the Syndesis\
+    \ and provides a single\n                entry\n                point for the\
+    \ Syndesis UI. For console developement it can run in off-line mode where it only\n\
+    \                serves\n                responses from the response cache."
+  version: "v1"
+  title: "Syndesis API"
+  contact:
+    name: "The Syndesis Community"
+    url: "https://syndesis.io/"
+    email: "syndesis@googlegroups.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/api/v1"
+tags:
+- name: "connections"
+- name: "actions"
+- name: "connectorgroups"
+- name: "connectors"
+- name: "credentials"
+- name: "integrations"
+- name: "integration-support"
+- name: "permissions"
+- name: "roles"
+- name: "users"
+schemes:
+- "http"
+- "https"
+paths:
+  /connections/{id}/actions/{id}:
+    post:
+      tags:
+      - "actions"
+      - "connections"
+      summary: "Retrieves enriched action definition, that is an action definition\
+        \ that has input/output data shapes and property enums defined with respect\
+        \ to the given action properties"
+      description: ""
+      operationId: "enrichWithMetadata"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+        x-example: "io.syndesis:salesforce-create-or-update:latest"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          type: "object"
+          additionalProperties:
+            type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+        x-example: "my-connection"
+      responses:
+        200:
+          description: "A map of zero or more action property suggestions keyed by\
+            \ the property name"
+          schema:
+            $ref: "#/definitions/ActionDefinition"
+  /connections/{id}:
+    get:
+      tags:
+      - "connections"
+      operationId: "get_1"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Connection"
+          headers: {}
+    put:
+      tags:
+      - "connections"
+      operationId: "update"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Connection"
+      responses:
+        default:
+          description: "successful operation"
+    delete:
+      tags:
+      - "connections"
+      operationId: "delete"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+  /connections:
+    get:
+      tags:
+      - "connections"
+      operationId: "list"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sort"
+        in: "query"
+        description: "Sort the result list according to the given field value"
+        required: false
+        type: "string"
+      - name: "direction"
+        in: "query"
+        description: "Sorting direction when a 'sort' field is provided. Can be 'asc'\
+          \ (ascending) or 'desc' (descending)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Page number to return"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "per_page"
+        in: "query"
+        description: "Number of records per page"
+        required: false
+        type: "integer"
+        default: 20
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListResultWithIdObject"
+          headers: {}
+    post:
+      tags:
+      - "connections"
+      operationId: "create"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Connection"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Connection"
+          headers: {}
+  /connections/validation:
+    post:
+      tags:
+      - "connections"
+      operationId: "validate"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Connection"
+      responses:
+        204:
+          description: "All validations pass"
+        400:
+          description: "Found violations in validation"
+          schema:
+            type: "array"
+            uniqueItems: true
+            items:
+              $ref: "#/definitions/Violation"
+  /connectorgroups:
+    get:
+      tags:
+      - "connectorgroups"
+      operationId: "list_1"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sort"
+        in: "query"
+        description: "Sort the result list according to the given field value"
+        required: false
+        type: "string"
+      - name: "direction"
+        in: "query"
+        description: "Sorting direction when a 'sort' field is provided. Can be 'asc'\
+          \ (ascending) or 'desc' (descending)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Page number to return"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "per_page"
+        in: "query"
+        description: "Number of records per page"
+        required: false
+        type: "integer"
+        default: 20
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListResultWithIdObject"
+          headers: {}
+  /connectorgroups/{id}:
+    get:
+      tags:
+      - "connectorgroups"
+      operationId: "get"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/WithIdObject"
+          headers: {}
+  /connectors/{connectorId}/actions/{actionId}/filters/options:
+    get:
+      tags:
+      - "connectors"
+      operationId: "getFilterOptions"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "connectorId"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "actionId"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/FilterOptions"
+          headers: {}
+  /connectors/{id}/credentials:
+    get:
+      tags:
+      - "credentials"
+      - "connectors"
+      operationId: "get"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/AcquisitionMethod"
+          headers: {}
+    post:
+      tags:
+      - "credentials"
+      - "connectors"
+      operationId: "create"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/AcquisitionRequest"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+  /connectors/{id}/verifier:
+    post:
+      tags:
+      - "connectors"
+      operationId: "verifyConnectionParameters"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          type: "object"
+          additionalProperties:
+            type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Result"
+          headers: {}
+  /connectors/{id}/actions/{id}:
+    get:
+      tags:
+      - "actions"
+      - "connectors"
+      operationId: "get_3"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Action"
+          headers: {}
+  /connectors/{id}/actions:
+    get:
+      tags:
+      - "actions"
+      - "connectors"
+      operationId: "list_2"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - name: "sort"
+        in: "query"
+        description: "Sort the result list according to the given field value"
+        required: false
+        type: "string"
+      - name: "direction"
+        in: "query"
+        description: "Sorting direction when a 'sort' field is provided. Can be 'asc'\
+          \ (ascending) or 'desc' (descending)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Page number to return"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "per_page"
+        in: "query"
+        description: "Number of records per page"
+        required: false
+        type: "integer"
+        default: 20
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListResultAction"
+          headers: {}
+  /connectors:
+    get:
+      tags:
+      - "connectors"
+      operationId: "list_3"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sort"
+        in: "query"
+        description: "Sort the result list according to the given field value"
+        required: false
+        type: "string"
+      - name: "direction"
+        in: "query"
+        description: "Sorting direction when a 'sort' field is provided. Can be 'asc'\
+          \ (ascending) or 'desc' (descending)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Page number to return"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "per_page"
+        in: "query"
+        description: "Number of records per page"
+        required: false
+        type: "integer"
+        default: 20
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListResultWithIdObject"
+          headers: {}
+  /connectors/{id}:
+    get:
+      tags:
+      - "connectors"
+      operationId: "get_2"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/WithIdObject"
+          headers: {}
+  /integrations/{id}/export.zip:
+    get:
+      tags:
+      - "integrations"
+      operationId: "export"
+      produces:
+      - "application/octet-stream"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/StreamingOutput"
+          headers: {}
+  /integrations/filters/options:
+    get:
+      tags:
+      - "integrations"
+      operationId: "getGlobalFilterOptions"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/FilterOptions"
+          headers: {}
+    post:
+      tags:
+      - "integrations"
+      operationId: "getFilterOptions"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/DataShape"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/FilterOptions"
+          headers: {}
+  /integrations/{id}:
+    get:
+      tags:
+      - "integrations"
+      operationId: "get_5"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Integration"
+          headers: {}
+    put:
+      tags:
+      - "integrations"
+      operationId: "update_1"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Integration"
+      responses:
+        default:
+          description: "successful operation"
+    delete:
+      tags:
+      - "integrations"
+      operationId: "delete_1"
+      consumes:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+  /integrations:
+    get:
+      tags:
+      - "integrations"
+      operationId: "list_4"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sort"
+        in: "query"
+        description: "Sort the result list according to the given field value"
+        required: false
+        type: "string"
+      - name: "direction"
+        in: "query"
+        description: "Sorting direction when a 'sort' field is provided. Can be 'asc'\
+          \ (ascending) or 'desc' (descending)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Page number to return"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "per_page"
+        in: "query"
+        description: "Number of records per page"
+        required: false
+        type: "integer"
+        default: 20
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListResultIntegration"
+          headers: {}
+    post:
+      tags:
+      - "integrations"
+      operationId: "create_1"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Integration"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Integration"
+          headers: {}
+  /integrations/validation:
+    post:
+      tags:
+      - "integrations"
+      operationId: "validate_1"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Integration"
+      responses:
+        204:
+          description: "All validations pass"
+        400:
+          description: "Found violations in validation"
+          schema:
+            type: "array"
+            uniqueItems: true
+            items:
+              $ref: "#/definitions/Violation"
+  /integration-support/generate/pom.xml:
+    post:
+      tags:
+      - "integration-support"
+      operationId: "projectPom"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/octet-stream"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/Integration"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+              format: "byte"
+          headers: {}
+  /integration-support/import:
+    post:
+      tags:
+      - "integration-support"
+      operationId: "importIntegration"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/InputStream"
+      responses:
+        default:
+          description: "successful operation"
+  /permissions:
+    get:
+      tags:
+      - "permissions"
+      operationId: "list_5"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sort"
+        in: "query"
+        description: "Sort the result list according to the given field value"
+        required: false
+        type: "string"
+      - name: "direction"
+        in: "query"
+        description: "Sorting direction when a 'sort' field is provided. Can be 'asc'\
+          \ (ascending) or 'desc' (descending)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Page number to return"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "per_page"
+        in: "query"
+        description: "Number of records per page"
+        required: false
+        type: "integer"
+        default: 20
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListResultWithIdObject"
+          headers: {}
+  /permissions/{id}:
+    get:
+      tags:
+      - "permissions"
+      operationId: "get_4"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/WithIdObject"
+          headers: {}
+  /roles:
+    get:
+      tags:
+      - "roles"
+      operationId: "list_6"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sort"
+        in: "query"
+        description: "Sort the result list according to the given field value"
+        required: false
+        type: "string"
+      - name: "direction"
+        in: "query"
+        description: "Sorting direction when a 'sort' field is provided. Can be 'asc'\
+          \ (ascending) or 'desc' (descending)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Page number to return"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "per_page"
+        in: "query"
+        description: "Number of records per page"
+        required: false
+        type: "integer"
+        default: 20
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListResultWithIdObject"
+          headers: {}
+  /roles/{id}:
+    get:
+      tags:
+      - "roles"
+      operationId: "get_6"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/WithIdObject"
+          headers: {}
+  /users/~:
+    get:
+      tags:
+      - "users"
+      operationId: "whoAmI"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+          headers: {}
+  /users:
+    get:
+      tags:
+      - "users"
+      operationId: "list_7"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sort"
+        in: "query"
+        description: "Sort the result list according to the given field value"
+        required: false
+        type: "string"
+      - name: "direction"
+        in: "query"
+        description: "Sorting direction when a 'sort' field is provided. Can be 'asc'\
+          \ (ascending) or 'desc' (descending)"
+        required: false
+        type: "string"
+      - name: "page"
+        in: "query"
+        description: "Page number to return"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "per_page"
+        in: "query"
+        description: "Number of records per page"
+        required: false
+        type: "integer"
+        default: 20
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ListResultWithIdObject"
+          headers: {}
+  /users/{id}:
+    get:
+      tags:
+      - "users"
+      operationId: "get_7"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/WithIdObject"
+          headers: {}
+definitions:
+  ActionDefinition:
+    type: "object"
+    properties:
+      inputDataShape:
+        $ref: "#/definitions/DataShape"
+      outputDataShape:
+        $ref: "#/definitions/DataShape"
+      propertyDefinitionSteps:
+        type: "array"
+        items:
+          $ref: "#/definitions/ActionDefinitionStep"
+  ActionDefinitionStep:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      description:
+        type: "string"
+      name:
+        type: "string"
+      configuredProperties:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      properties:
+        type: "object"
+        additionalProperties:
+          $ref: "#/definitions/ConfigurationProperty"
+  ConfigurationProperty:
+    type: "object"
+    properties:
+      displayName:
+        type: "string"
+      description:
+        type: "string"
+      deprecated:
+        type: "boolean"
+      group:
+        type: "string"
+      label:
+        type: "string"
+      enum:
+        type: "array"
+        items:
+          $ref: "#/definitions/PropertyValue"
+      kind:
+        type: "string"
+      required:
+        type: "boolean"
+      javaType:
+        type: "string"
+      type:
+        type: "string"
+      defaultValue:
+        type: "string"
+      tags:
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "string"
+  DataShape:
+    type: "object"
+    properties:
+      kind:
+        type: "string"
+      specification:
+        type: "string"
+      exemplar:
+        type: "array"
+        items:
+          type: "string"
+          format: "byte"
+      type:
+        type: "string"
+  PropertyValue:
+    type: "object"
+    properties:
+      label:
+        type: "string"
+      value:
+        type: "string"
+  Action:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      description:
+        type: "string"
+      pattern:
+        type: "string"
+        enum:
+        - "From"
+        - "To"
+      camelConnectorGAV:
+        type: "string"
+      camelConnectorPrefix:
+        type: "string"
+      connectorId:
+        type: "string"
+      definition:
+        $ref: "#/definitions/ActionDefinition"
+      id:
+        type: "string"
+      name:
+        type: "string"
+      tags:
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "string"
+  Connection:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      icon:
+        type: "string"
+      options:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      description:
+        type: "string"
+      organization:
+        $ref: "#/definitions/Organization"
+      lastUpdated:
+        type: "string"
+        format: "date-time"
+      userId:
+        type: "string"
+      configuredProperties:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      connectorId:
+        type: "string"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      organizationId:
+        type: "string"
+      derived:
+        type: "boolean"
+      connector:
+        $ref: "#/definitions/Connector"
+      id:
+        type: "string"
+      tags:
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "string"
+      name:
+        type: "string"
+  Connector:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      icon:
+        type: "string"
+      description:
+        type: "string"
+      connectorGroup:
+        $ref: "#/definitions/ConnectorGroup"
+      connectorGroupId:
+        type: "string"
+      configuredProperties:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      properties:
+        type: "object"
+        additionalProperties:
+          $ref: "#/definitions/ConfigurationProperty"
+      actions:
+        type: "array"
+        items:
+          $ref: "#/definitions/Action"
+      id:
+        type: "string"
+      name:
+        type: "string"
+  ConnectorGroup:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+  Environment:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+  Extension:
+    type: "object"
+    required:
+    - "description"
+    - "extensionId"
+    - "name"
+    properties:
+      extensionId:
+        type: "string"
+      description:
+        type: "string"
+      status:
+        type: "string"
+        enum:
+        - "Draft"
+        - "Installed"
+        - "Deleted"
+      id:
+        type: "string"
+      name:
+        type: "string"
+      tags:
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "string"
+      properties:
+        type: "object"
+        additionalProperties:
+          $ref: "#/definitions/ConfigurationProperty"
+  Integration:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      configuration:
+        type: "string"
+      description:
+        type: "string"
+      lastUpdated:
+        type: "string"
+        format: "date-time"
+      userId:
+        type: "string"
+      steps:
+        type: "array"
+        items:
+          $ref: "#/definitions/Step"
+      deployedRevisionId:
+        type: "integer"
+        format: "int32"
+      draftRevision:
+        $ref: "#/definitions/IntegrationRevision"
+      integrationTemplateId:
+        type: "string"
+      users:
+        type: "array"
+        items:
+          $ref: "#/definitions/User"
+      connections:
+        type: "array"
+        items:
+          $ref: "#/definitions/Connection"
+      desiredStatus:
+        type: "string"
+        enum:
+        - "Draft"
+        - "Pending"
+        - "Activated"
+        - "Deactivated"
+        - "Deleted"
+      currentStatus:
+        type: "string"
+        enum:
+        - "Draft"
+        - "Pending"
+        - "Activated"
+        - "Deactivated"
+        - "Deleted"
+      stepsDone:
+        type: "array"
+        items:
+          type: "string"
+      statusMessage:
+        type: "string"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      timesUsed:
+        type: "integer"
+      revisions:
+        type: "array"
+        uniqueItems: true
+        items:
+          $ref: "#/definitions/IntegrationRevision"
+      id:
+        type: "string"
+      tags:
+        type: "array"
+        uniqueItems: true
+        items:
+          type: "string"
+      name:
+        type: "string"
+  IntegrationRevision:
+    type: "object"
+    properties:
+      version:
+        type: "integer"
+        format: "int32"
+      lastUpdated:
+        type: "string"
+        format: "date-time"
+      currentState:
+        type: "string"
+        enum:
+        - "Draft"
+        - "Active"
+        - "Inactive"
+        - "Undeployed"
+        - "Error"
+        - "Pending"
+      createdDate:
+        type: "string"
+        format: "date-time"
+      timesUsed:
+        type: "integer"
+      targetMessage:
+        type: "string"
+      targetState:
+        type: "string"
+        enum:
+        - "Draft"
+        - "Active"
+        - "Inactive"
+        - "Undeployed"
+        - "Error"
+        - "Pending"
+      parentVersion:
+        type: "integer"
+        format: "int32"
+      spec:
+        $ref: "#/definitions/IntegrationRevisionSpec"
+      currentMessage:
+        type: "string"
+  IntegrationRevisionSpec:
+    type: "object"
+    properties:
+      configuration:
+        type: "string"
+      steps:
+        type: "array"
+        items:
+          $ref: "#/definitions/Step"
+      connections:
+        type: "array"
+        items:
+          $ref: "#/definitions/Connection"
+  Organization:
+    type: "object"
+    required:
+    - "name"
+    properties:
+      users:
+        type: "array"
+        items:
+          $ref: "#/definitions/User"
+      environments:
+        type: "array"
+        items:
+          $ref: "#/definitions/Environment"
+      id:
+        type: "string"
+      name:
+        type: "string"
+  Step:
+    type: "object"
+    properties:
+      extension:
+        $ref: "#/definitions/Extension"
+      connection:
+        $ref: "#/definitions/Connection"
+      configuredProperties:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      action:
+        $ref: "#/definitions/Action"
+      stepKind:
+        type: "string"
+      name:
+        type: "string"
+      id:
+        type: "string"
+  User:
+    type: "object"
+    properties:
+      fullName:
+        type: "string"
+      username:
+        type: "string"
+      organizationId:
+        type: "string"
+      lastName:
+        type: "string"
+      firstName:
+        type: "string"
+      integrations:
+        type: "array"
+        items:
+          $ref: "#/definitions/Integration"
+      roleId:
+        type: "string"
+      name:
+        type: "string"
+      id:
+        type: "string"
+  ListResult:
+    type: "object"
+    properties:
+      items:
+        type: "array"
+        items:
+          type: "object"
+      totalCount:
+        type: "integer"
+        format: "int32"
+  ListResultWithIdObject:
+    type: "object"
+    properties:
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/WithIdObject"
+      totalCount:
+        type: "integer"
+        format: "int32"
+  WithId:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+  WithIdObject:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+  Violation:
+    type: "object"
+  FilterOptions:
+    type: "object"
+    properties:
+      paths:
+        type: "array"
+        items:
+          type: "string"
+      ops:
+        type: "array"
+        items:
+          $ref: "#/definitions/Op"
+  Op:
+    type: "object"
+    properties:
+      label:
+        type: "string"
+      operator:
+        type: "string"
+  AcquisitionMethod:
+    type: "object"
+    properties:
+      icon:
+        type: "string"
+      description:
+        type: "string"
+      label:
+        type: "string"
+      type:
+        type: "string"
+        enum:
+        - "OAUTH1"
+        - "OAUTH2"
+  AcquisitionRequest:
+    type: "object"
+    properties:
+      returnUrl:
+        type: "string"
+        format: "uri"
+  Error:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+      code:
+        type: "string"
+      parameters:
+        type: "array"
+        items:
+          type: "string"
+      attributes:
+        type: "object"
+        additionalProperties:
+          type: "object"
+  Result:
+    type: "object"
+    properties:
+      errors:
+        type: "array"
+        items:
+          $ref: "#/definitions/Error"
+      scope:
+        type: "string"
+        enum:
+        - "PARAMETERS"
+        - "CONNECTIVITY"
+      status:
+        type: "string"
+        enum:
+        - "OK"
+        - "ERROR"
+        - "UNSUPPORTED"
+  ListResultAction:
+    type: "object"
+    properties:
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/Action"
+      totalCount:
+        type: "integer"
+        format: "int32"
+  StreamingOutput:
+    type: "object"
+  ListResultIntegration:
+    type: "object"
+    properties:
+      items:
+        type: "array"
+        items:
+          $ref: "#/definitions/Integration"
+      totalCount:
+        type: "integer"
+        format: "int32"
+  InputStream:
+    type: "object"

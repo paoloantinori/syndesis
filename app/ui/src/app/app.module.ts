@@ -32,6 +32,7 @@ import { SyndesisCommonModule } from './common/common.module';
 import { UserService } from './common/user.service';
 import { ConfigService } from './config.service';
 import { StoreModule } from './store/store.module';
+import { SupportModule } from './support/support.module';
 
 export function appInitializer(configService: ConfigService) {
   return () => {
@@ -115,6 +116,7 @@ export function mapperRestangularProvider(
     TagInputModule,
     AppRoutingModule,
     StoreModule,
+    SupportModule,
     SyndesisCommonModule.forRoot(),
     DataMapperModule,
     NotificationModule,

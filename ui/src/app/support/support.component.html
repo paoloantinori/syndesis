@@ -1,0 +1,39 @@
+<syndesis-modal id="supportPage"
+                [body]="supportPageModal" [hideNav]="true">
+  <ng-template #supportPageModal let-modal="modal">
+      Please select the information you want to download:
+      <form class="form-horizontal"
+          [formGroup]="formGroup">
+        <syndesis-form-control *ngFor="let controlModel of formModel; last as last"
+                            [group]="formGroup"
+                            [model]="controlModel">
+        <div *ngIf="last"
+            class="col-md-12">
+          <p></p>
+          <div class="pull-right">
+            <ng-container *ngIf="!message">
+              <button type="button"
+                      class="btn btn-primary"
+                      (click)="download()"
+                      [disabled]="loading">
+                <span class="spinner spinner-sm spinner-inline"
+                      *ngIf="loading"></span>Download</button>
+              <button type="button"
+                      class="btn btn-default"
+                      (click)="close('supportPage')"
+                      [disabled]="loading">Cancel</button>
+            </ng-container>
+            <ng-container *ngIf="message">
+              <button type="button"
+                      class="btn btn-primary"
+                      (click)="item.expanded = false"
+                      [disabled]="loading">Ok</button>
+            </ng-container>
+          </div>
+        </div>
+        </syndesis-form-control>
+      </form>
+  </ng-template>
+
+
+</syndesis-modal>

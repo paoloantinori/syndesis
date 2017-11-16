@@ -19,6 +19,7 @@ export class ModalComponent implements OnInit, OnDestroy, OnChanges {
   @Input() title: string;
   @Input() message: string;
   @Input() body: TemplateRef<any>;
+  @Input() hideNav: boolean;
   @ViewChild('template') public template: TemplateRef<any>;
 
   constructor(private modalService: ModalService) {}

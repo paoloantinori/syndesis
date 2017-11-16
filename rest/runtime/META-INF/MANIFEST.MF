@@ -1,0 +1,31 @@
+Manifest-Version: 1.0
+Implementation-Title: Syndesis REST :: Runtime
+Implementation-Version: 1.1-SNAPSHOT
+Built-By: pantinor
+Specification-Vendor: Red Hat
+Specification-Title: Syndesis REST :: Runtime
+Implementation-Vendor-Id: io.syndesis
+X-BasePOM-Build-Id: 968fc5a5-5954-44d2-904d-1481d3e4a5cf
+Spring-Boot-Version: 1.5.8.RELEASE
+Implementation-Vendor: Red Hat
+Main-Class: org.springframework.boot.loader.JarLauncher
+Start-Class: io.syndesis.runtime.Application
+Spring-Boot-Classes: BOOT-INF/classes/
+X-BasePOM-Name: Syndesis REST :: Runtime
+Spring-Boot-Lib: BOOT-INF/lib/
+Created-By: Apache Maven 3.5.2
+Build-Jdk: 1.8.0_151
+Specification-Version: 1.1
+X-BasePOM-Git-Commit-Id: 27ff4e6b3c825caa6141473c8cceefb138cc6fe2
+
+Name: io.syndesis:runtime
+Git-Branch: supporting_page
+Git-Commit-Id-Describe: 27ff4e6
+Project-GroupId: io.syndesis
+Git-Remote-Origin-Url: https://github.com/syndesisio/syndesis.git
+Project-Name: Syndesis REST :: Runtime
+Project-ArtifactId: runtime
+Build-Time: 2017-11-16T21:36:08+0100
+Project-Version: 1.1-SNAPSHOT
+Git-Commit-Id: 27ff4e6b3c825caa6141473c8cceefb138cc6fe2
+

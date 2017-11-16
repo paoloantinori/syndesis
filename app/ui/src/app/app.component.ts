@@ -260,4 +260,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.userService.setTourState(true);
     this.guidedTourStatus = this.userService.getTourState();
   }
+
+  showSupportDialog() {
+    this.modalService.show('supportPage').then(modal => {
+      let a = 1;
+      a++;
+      // linting prevents me to have a dummy block here
+    });
+  }
+
 }
