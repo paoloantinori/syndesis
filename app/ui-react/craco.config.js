@@ -1,4 +1,4 @@
-/ You can also use craco-alias plugin: https://github.com/risenforces/craco-alias
+// You can also use craco-alias plugin: https://github.com/risenforces/craco-alias
 
 module.exports = {
     overrideCracoConfig: ({ cracoConfig, pluginOptions, context: { env, paths } }) => {

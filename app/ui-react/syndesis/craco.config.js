@@ -1,3 +1,5 @@
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
 module.exports = function({ env, paths }) {
   return {
     // disable the custom loading of sourcemaps, it's too slow
@@ -30,6 +32,13 @@ module.exports = function({ env, paths }) {
         alias: {
             "vscode": require.resolve('monaco-languageclient/lib/vscode-compatibility') 
         }
+        ,
+        plugins: [    
+          new MonacoWebpackPlugin({
+          // available options are documented at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
+          languages: ['sql', 'pgsql']
+         })
+        ]
     }
   };
 };
